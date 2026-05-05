@@ -6,12 +6,13 @@
 |-------|------|----------|--------|-----------|-----|----------|
 | cycle-01 | ✅ 완료 | 스마트스토어 AI CS 매니저 데모. 히어로/하이라이트/필터/모달/BA 포함. 31개 가상 CS 데이터. GitHub Pages 배포 완료. | [보고서](cycle-01/CYCLE_REPORT.md) | [입력](cycle-01/NEXT_CYCLE_INPUT.md) | [QA](cycle-01/QA_RESULTS.md) | [변경](cycle-01/CHANGE_SUMMARY.md) |
 | cycle-02 | ✅ 완료 | 검색/정렬/위험도필터/모바일480px/초기화버튼 개선. 단계별 워커/페르소나 기록 도입. QA 46/46 통과. | [보고서](cycle-02/CYCLE_REPORT.md) | [입력](cycle-02/NEXT_CYCLE_INPUT.md) | [QA](cycle-02/QA_RESULTS.md) | [변경](cycle-02/CHANGE_SUMMARY.md) |
+| **cycle-03** | ✅ **완료** | 데이터 시각화(Chart.js 3종), AI 응답 시뮬레이션(5단계), CSV 내보내기, 문의 등록 폼, 영업용 데모 흐름 강화. 6개 워커/페르소나 기록. QA 49/50 통과. 태그: v0.3.0-cycle-03 | [보고서](cycle-03/CYCLE_REPORT.md) | [입력](cycle-03/NEXT_CYCLE_INPUT.md) | [QA](cycle-03/QA_RESULTS.md) | [변경](cycle-03/CHANGE_SUMMARY.md) |
 
 ## 최신 권장 입력
 
 | 순서 | 파일 | 이유 |
 |------|------|------|
-| 1 | [NEXT_CYCLE_INPUT.md](cycle-02/NEXT_CYCLE_INPUT.md) | 다음 사이클 목표와 우선순위 |
-| 2 | [CYCLE_REPORT.md](cycle-02/CYCLE_REPORT.md) | 최신 사이클 상세 결과 |
+| 1 | [NEXT_CYCLE_INPUT.md](cycle-03/NEXT_CYCLE_INPUT.md) | 다음 사이클 목표와 우선순위 |
+| 2 | [CYCLE_REPORT.md](cycle-03/CYCLE_REPORT.md) | 최신 사이클 상세 결과 |
 | 3 | [README.md](../README.md) | 프로젝트 전체 현황 |
-| 4 | [QA_RESULTS.md](cycle-02/QA_RESULTS.md) | 검증 기준 및 결과 (46/46) |
+| 4 | [QA_RESULTS.md](cycle-03/QA_RESULTS.md) | 검증 기준 및 결과 (49/50) |

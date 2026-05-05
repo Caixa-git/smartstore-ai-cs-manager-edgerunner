@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>스마트스토어 AI CS 매니저 — 모모펫 스토어</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <!-- ==================== HERO SECTION ==================== -->
@@ -32,6 +33,35 @@
     </div>
   </section>
 
+  <!-- ==================== DATA VISUALIZATION ==================== -->
+  <section class="viz-section" id="viz-section">
+    <h2 class="section-title">📊 AI CS 데이터 분석</h2>
+    <p class="section-subtitle">오늘 들어온 문의를 AI가 분석한 결과입니다. 차트를 보면 사장님이 어디에 집중해야 할지 한눈에 파악할 수 있습니다.</p>
+    <div class="viz-grid">
+      <div class="viz-card">
+        <h3 class="viz-title">문의 유형별 비중</h3>
+        <div class="chart-container">
+          <canvas id="chart-category"></canvas>
+        </div>
+        <p class="viz-note">가장 많은 문의 유형을 확인하세요. 배송 문의가 많다면 상품 페이지에 배송 정보를 보강하는 것이 좋습니다.</p>
+      </div>
+      <div class="viz-card">
+        <h3 class="viz-title">위험도별 문의 분포</h3>
+        <div class="chart-container">
+          <canvas id="chart-risk"></canvas>
+        </div>
+        <p class="viz-note">치명/높음 위험 문의는 즉시 사장님이 확인해야 합니다. AI가 위험도를 자동으로 분류합니다.</p>
+      </div>
+      <div class="viz-card">
+        <h3 class="viz-title">AI 처리 vs 사장님 확인</h3>
+        <div class="chart-container">
+          <canvas id="chart-owner-vs-auto"></canvas>
+        </div>
+        <p class="viz-note">AI가 처리 가능한 문의와 사장님이 직접 확인해야 할 문의의 비율입니다. AI가 CS 업무의 대부분을 자동화합니다.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ==================== SEARCH BAR ==================== -->
   <section class="search-section">
     <div class="search-container">
@@ -48,6 +78,51 @@
     <h2 class="section-title">🐾 오늘의 주요 사례</h2>
     <div class="highlight-grid" id="highlight-grid">
       <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- ==================== AI SIMULATION DEMO ==================== -->
+  <section class="sim-section" id="sim-section">
+    <h2 class="section-title">🤖 AI 응답 처리 시뮬레이션</h2>
+    <p class="section-subtitle">실제 AI가 문의를 분석하고 답변을 생성하는 과정을 직접 확인해보세요. 아래 문의를 선택하면 AI 처리 단계를 시연합니다.</p>
+    <div class="sim-controls">
+      <div class="sim-select-wrap">
+        <label class="sim-label">문의 선택:</label>
+        <select class="sim-select" id="sim-select">
+          <option value="">— 문의를 선택하세요 —</option>
+        </select>
+      </div>
+      <button class="sim-start-btn" id="sim-start-btn">▶ AI 분석 시작</button>
+    </div>
+    <div class="sim-steps hidden" id="sim-steps">
+      <div class="sim-step" data-step="1">
+        <span class="sim-step-icon">1</span>
+        <span class="sim-step-text">문의 접수 및 분석 시작...</span>
+        <span class="sim-step-status"></span>
+      </div>
+      <div class="sim-step" data-step="2">
+        <span class="sim-step-icon">2</span>
+        <span class="sim-step-text">문의 유형 분류 중...</span>
+        <span class="sim-step-status"></span>
+      </div>
+      <div class="sim-step" data-step="3">
+        <span class="sim-step-icon">3</span>
+        <span class="sim-step-text">위험도 판단 중...</span>
+        <span class="sim-step-status"></span>
+      </div>
+      <div class="sim-step" data-step="4">
+        <span class="sim-step-icon">4</span>
+        <span class="sim-step-text">답변 초안 생성 중...</span>
+        <span class="sim-step-status"></span>
+      </div>
+      <div class="sim-step" data-step="5">
+        <span class="sim-step-icon">5</span>
+        <span class="sim-step-text">사장님 확인 필요 여부 판단</span>
+        <span class="sim-step-status"></span>
+      </div>
+    </div>
+    <div class="sim-result hidden" id="sim-result">
+      <!-- Filled by JS -->
     </div>
   </section>
 
@@ -85,7 +160,10 @@
     </div>
     <div class="filter-info" id="filter-info">
       <span id="filter-result-count">31개 문의</span>
-      <button class="reset-btn" id="reset-filter">🔄 초기화</button>
+      <div class="filter-actions">
+        <button class="csv-btn" id="csv-export-btn">📥 CSV 내보내기</button>
+        <button class="reset-btn" id="reset-filter">🔄 초기화</button>
+      </div>
     </div>
     <div class="inquiry-grid" id="inquiry-grid">
       <!-- Rendered by JS -->
@@ -94,6 +172,58 @@
       <div class="empty-icon">📭</div>
       <h3 id="empty-title">조건에 맞는 문의가 없습니다</h3>
       <p id="empty-desc">다른 필터를 선택해 보세요.</p>
+    </div>
+  </section>
+
+  <!-- ==================== INQUIRY REGISTRATION FORM ==================== -->
+  <section class="form-section" id="form-section">
+    <h2 class="section-title">📝 새 문의 등록 (데모)</h2>
+    <p class="section-subtitle">실제 CS 문의가 들어오는 상황을 데모로 재현합니다. 입력한 내용은 이 페이지에서만 임시로 추가되며, 새로고침 시 초기화됩니다.</p>
+    <div class="inquiry-form" id="inquiry-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="form-customer">고객 라벨</label>
+          <input type="text" class="form-input" id="form-customer" placeholder="예: 고객_김*철" value="고객_테스트">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="form-channel">채널</label>
+          <select class="form-input" id="form-channel">
+            <option value="스마트스토어 톡톡">스마트스토어 톡톡</option>
+            <option value="네이버 톡톡">네이버 톡톡</option>
+            <option value="이메일">이메일</option>
+            <option value="인스타그램 DM">인스타그램 DM</option>
+            <option value="리뷰">리뷰</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="form-product">상품명</label>
+          <input type="text" class="form-input" id="form-product" placeholder="예: 강아지 사료 6kg" value="프리미엄 강아지 사료">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="form-category">문의 유형</label>
+          <select class="form-input" id="form-category">
+            <option value="배송">배송</option>
+            <option value="교환/환불">교환/환불</option>
+            <option value="클레임">클레임</option>
+            <option value="상품문의">상품문의</option>
+            <option value="리뷰관리">리뷰관리</option>
+            <option value="쿠폰">쿠폰</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="form-message">문의 내용</label>
+        <textarea class="form-textarea" id="form-message" rows="3" placeholder="문의 내용을 입력하세요">배송이 너무 늦게 왔어요. 언제 오나요?</textarea>
+      </div>
+      <div class="form-actions">
+        <button class="form-btn form-auto-btn" id="form-auto-classify">🤖 AI 자동 분류</button>
+        <button class="form-btn form-submit-btn" id="form-submit-btn">📩 문의 등록</button>
+      </div>
+      <div class="form-feedback hidden" id="form-feedback">
+        <!-- Filled by JS -->
+      </div>
     </div>
   </section>
 
@@ -138,6 +268,15 @@
   <div class="modal hidden" id="modal">
     <button class="modal-close" id="modal-close">&times;</button>
     <div class="modal-body" id="modal-body">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <!-- ==================== AI SIMULATION MODAL ==================== -->
+  <div class="modal-overlay hidden" id="sim-modal-overlay"></div>
+  <div class="modal sim-modal hidden" id="sim-modal">
+    <button class="modal-close" id="sim-modal-close">&times;</button>
+    <div class="modal-body" id="sim-modal-body">
       <!-- Rendered by JS -->
     </div>
   </div>
