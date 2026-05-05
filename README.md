@@ -5,7 +5,7 @@
 
 ## 현재 상태
 
-✅ **완료** — Cycle 01
+✅ **완료** — Cycle 02 (검색·정렬·위험도 필터 보강)
 
 ## Live Demo
 
@@ -36,6 +36,10 @@ python3 -m http.server 8000
 | 🏠 첫 화면 | 제품명 + 한 줄 가치 제안 + 오늘 문의 요약 통계 |
 | ⭐ 데모 하이라이트 | 위험 클레임 / 자동 답변 / 긍정 사례 3종 카드 |
 | 🔍 6종 필터 | 전체 / 사장님 확인 필요 / 자동 답변 가능 / 클레임 위험 / 배송문의 / 교환/환불 |
+| 🔎 검색어 입력 | 고객명·상품명·문의내용·AI요약·답변초안 실시간 검색 (250ms 디바운스) |
+| 🔽 4종 정렬 | 최신순 / 우선순위 높은순 / 위험도 높은순 / 사장님 확인 필요 우선 |
+| ⚠️ 위험도 서브 필터 | 치명(critical) / 높음(high) / 보통(medium) / 낮음(low) 세분화 필터링 |
+| 🔄 초기화 버튼 | 검색어·필터·정렬·위험도 필터 전체 한 번에 리셋 |
 | 📋 상세 모달 | 고객 원문 → AI 요약 → 답변 초안 → 톤 가이드 → 연동 방식 |
 | 📊 Before/After | AI 도입 전후 비교 섹션 |
 | 🤖 AI 직원 6명 | 문의분류 / 답변작성 / 클레임감지 / 주문정리 / 리뷰관리 / 위험감지 |
@@ -64,16 +68,16 @@ python3 -m http.server 8000
 | Cycle | 상태 | 보고서 | 다음 입력 | 태그 |
 |-------|------|--------|-----------|------|
 | cycle-01 | ✅ 완료 | [보고서](outputs/cycle-01/CYCLE_REPORT.md) | [입력](outputs/cycle-01/NEXT_CYCLE_INPUT.md) | `v0.1.0-cycle-01` |
+| cycle-02 | ✅ 완료 | [보고서](outputs/cycle-02/CYCLE_REPORT.md) | [입력](outputs/cycle-02/NEXT_CYCLE_INPUT.md) | `v0.2.0-cycle-02` |
 
 ## 검증 결과
 
 | 구분 | 결과 |
 |------|------|
-| 전체 검증 항목 | 22 |
-| 통과 | **22** |
-| 통과율 | **100%** |
+| Cycle 01 검증 | 25/25 통과 |
+| Cycle 02 검증 | **46/46 통과 (100%)** |
 
-자세한 결과: [outputs/cycle-01/QA_RESULTS.md](outputs/cycle-01/QA_RESULTS.md)
+자세한 결과: [outputs/cycle-02/QA_RESULTS.md](outputs/cycle-02/QA_RESULTS.md)
 
 ## GitHub 전달 준비 상태
 
@@ -82,7 +86,7 @@ python3 -m http.server 8000
 | GitHub 저장소 | https://github.com/Caixa-git/smartstore-ai-cs-manager-edgerunner |
 | 저장소 공개 범위 | ✅ **public** |
 | Live Demo | ✅ https://caixa-git.github.io/smartstore-ai-cs-manager-edgerunner/ |
-| 태그 | ✅ v0.1.0-cycle-01 |
+| 태그 | ✅ v0.1.0-cycle-01, ✅ v0.2.0-cycle-02 |
 | GitHub 링크만으로 검토 가능 | ✅ **가능** |
 
 ## 구현하지 않은 것 (이번 사이클)

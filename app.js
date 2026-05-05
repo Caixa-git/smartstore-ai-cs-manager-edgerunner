@@ -4,6 +4,10 @@
 
 let inquiries = [];
 let currentFilter = 'all';
+let currentSort = 'latest';
+let currentRiskFilter = 'all';
+let currentSearch = '';
+let searchDebounceTimer = null;
 
 const FILTER_LABEL = {
   'all': '전체',
@@ -14,9 +18,20 @@ const FILTER_LABEL = {
   '교환/환불': '교환/환불'
 };
 
+const SORT_LABEL = {
+  'latest': '최신순',
+  'priority': '우선순위 높은순',
+  'risk': '위험도 높은순',
+  'owner_first': '사장님 확인 필요 우선'
+};
+
+const RISK_LEVEL_ORDER = { 'critical': 0, 'high': 1, 'medium': 2, 'low': 3 };
+const PRIORITY_ORDER = { 'high': 0, 'medium': 1, 'low': 2 };
+
 const PRIORITY_LABEL = { 'high': '높음', 'medium': '보통', 'low': '낮음' };
 const STATUS_LABEL = { 'new': '신규', 'processing': '처리 중', 'needs_owner_review': '확인 필요', 'auto_resolved': '자동 답변', 'done': '완료' };
 const RISK_LABEL = { 'critical': '🔴 치명', 'high': '🔴 높음', 'medium': '🟡 보통', 'low': '🟢 낮음' };
+const RISK_BADGE_CLASS = { 'critical': 'badge-risk-critical', 'high': 'badge-risk-high', 'medium': 'badge-risk-medium', 'low': 'badge-risk-low' };
 const SENTIMENT_LABEL = {
   'positive': '🟢 긍정',
   'neutral': '⚪ 중립',
@@ -28,6 +43,9 @@ const SENTIMENT_LABEL = {
 document.addEventListener('DOMContentLoaded', async () => {
   await loadData();
   setupFilters();
+  setupSort();
+  setupRiskFilter();
+  setupSearch();
   setupModal();
   renderHighlights();
 });
@@ -129,21 +147,100 @@ function setupFilters() {
       btn.classList.add('active');
       currentFilter = btn.dataset.filter;
       applyFilter();
-      // Scroll to dashboard
       document.getElementById('dashboard-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
-  document.getElementById('reset-filter').addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
-    currentFilter = 'all';
-    applyFilter();
+  document.getElementById('reset-filter').addEventListener('click', resetAll);
+}
+
+/* ==================== SORT ==================== */
+function setupSort() {
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentSort = btn.dataset.sort;
+      applyFilter();
+    });
   });
 }
 
+/* ==================== RISK SUB-FILTER ==================== */
+function setupRiskFilter() {
+  document.querySelectorAll('.risk-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentRiskFilter = btn.dataset.risk;
+      applyFilter();
+    });
+  });
+}
+
+/* ==================== SEARCH ==================== */
+function setupSearch() {
+  const input = document.getElementById('search-input');
+  const clearBtn = document.getElementById('search-clear');
+
+  input.addEventListener('input', () => {
+    const val = input.value.trim();
+    clearBtn.classList.toggle('hidden', val.length === 0);
+    // Debounce: wait 250ms after last keystroke
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() => {
+      currentSearch = val;
+      applyFilter();
+    }, 250);
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      clearTimeout(searchDebounceTimer);
+      currentSearch = input.value.trim();
+      applyFilter();
+    }
+  });
+
+  clearBtn.addEventListener('click', () => {
+    input.value = '';
+    clearBtn.classList.add('hidden');
+    currentSearch = '';
+    applyFilter();
+    input.focus();
+  });
+}
+
+/* ==================== RESET ALL ==================== */
+function resetAll() {
+  // Reset search
+  currentSearch = '';
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-clear').classList.add('hidden');
+
+  // Reset filter
+  currentFilter = 'all';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+
+  // Reset sort
+  currentSort = 'latest';
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.sort-btn[data-sort="latest"]').classList.add('active');
+
+  // Reset risk filter
+  currentRiskFilter = 'all';
+  document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.risk-btn[data-risk="all"]').classList.add('active');
+
+  applyFilter();
+  document.getElementById('dashboard-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ==================== APPLY FILTER (combined) ==================== */
 function applyFilter() {
   let filtered = inquiries;
 
+  // 1. Apply main filter
   switch (currentFilter) {
     case 'owner':
       filtered = inquiries.filter(i => i.owner_review_required || i.status === 'needs_owner_review');
@@ -160,17 +257,75 @@ function applyFilter() {
       }
   }
 
+  // 2. Apply risk sub-filter (if not 'all')
+  if (currentRiskFilter !== 'all') {
+    filtered = filtered.filter(i => i.risk_level === currentRiskFilter);
+  }
+
+  // 3. Apply search (full-text across 5 fields)
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    filtered = filtered.filter(i => {
+      return (i.customer_label && i.customer_label.toLowerCase().includes(q)) ||
+             (i.product_name && i.product_name.toLowerCase().includes(q)) ||
+             (i.message && i.message.toLowerCase().includes(q)) ||
+             (i.ai_summary && i.ai_summary.toLowerCase().includes(q)) ||
+             (i.draft_response && i.draft_response.toLowerCase().includes(q));
+    });
+  }
+
+  // 4. Apply sort
+  filtered = sortItems(filtered, currentSort);
+
   renderInquiries(filtered);
-  document.getElementById('filter-result-count').textContent = `${filtered.length}개 문의`;
+  updateResultCount(filtered.length);
+}
+
+function sortItems(items, mode) {
+  const sorted = [...items];
+  switch (mode) {
+    case 'latest':
+      sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      break;
+    case 'priority':
+      sorted.sort((a, b) => (PRIORITY_ORDER[a.priority] ?? 99) - (PRIORITY_ORDER[b.priority] ?? 99));
+      break;
+    case 'risk':
+      sorted.sort((a, b) => (RISK_LEVEL_ORDER[a.risk_level] ?? 99) - (RISK_LEVEL_ORDER[b.risk_level] ?? 99));
+      break;
+    case 'owner_first':
+      sorted.sort((a, b) => {
+        const aOwner = a.owner_review_required ? 0 : 1;
+        const bOwner = b.owner_review_required ? 0 : 1;
+        if (aOwner !== bOwner) return aOwner - bOwner;
+        return (PRIORITY_ORDER[a.priority] ?? 99) - (PRIORITY_ORDER[b.priority] ?? 99);
+      });
+      break;
+  }
+  return sorted;
+}
+
+function updateResultCount(count) {
+  const label = currentSearch ? `검색 결과` : `문의`;
+  document.getElementById('filter-result-count').textContent = `${count}개 ${label}`;
 }
 
 /* ==================== INQUIRY GRID ==================== */
 function renderInquiries(items) {
   const grid = document.getElementById('inquiry-grid');
   const empty = document.getElementById('empty-state');
+  const emptyTitle = document.getElementById('empty-title');
+  const emptyDesc = document.getElementById('empty-desc');
 
   if (items.length === 0) {
     grid.innerHTML = '';
+    if (currentSearch) {
+      emptyTitle.textContent = '🔍 검색 결과가 없습니다';
+      emptyDesc.textContent = `"${currentSearch}"에 해당하는 문의를 찾을 수 없습니다. 다른 키워드로 검색해 보세요.`;
+    } else {
+      emptyTitle.textContent = '조건에 맞는 문의가 없습니다';
+      emptyDesc.textContent = '다른 필터를 선택해 보세요.';
+    }
     empty.classList.remove('hidden');
     return;
   }
@@ -181,6 +336,7 @@ function renderInquiries(items) {
       <div class="card-header">
         <span class="card-title">${escapeHtml(item.message.slice(0, 40))}${item.message.length > 40 ? '...' : ''}</span>
         <div class="card-badges">
+          ${item.risk_level ? `<span class="badge badge-risk ${RISK_BADGE_CLASS[item.risk_level] || ''}">${RISK_LABEL[item.risk_level] || item.risk_level}</span>` : ''}
           ${item.priority === 'high' ? `<span class="badge badge-high">높음</span>` : ''}
           ${item.owner_review_required ? `<span class="badge badge-owner">확인</span>` : ''}
           ${item.sentiment === 'angry' || item.sentiment === 'urgent' ? `<span class="badge badge-angry">${item.sentiment === 'angry' ? '화남' : '긴급'}</span>` : ''}

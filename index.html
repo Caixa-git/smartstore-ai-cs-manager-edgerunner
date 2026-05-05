@@ -32,6 +32,17 @@
     </div>
   </section>
 
+  <!-- ==================== SEARCH BAR ==================== -->
+  <section class="search-section">
+    <div class="search-container">
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="search-input" placeholder="고객명, 상품명, 문의내용, AI 요약, 답변 검색..." autocomplete="off">
+        <button class="search-clear hidden" id="search-clear">&times;</button>
+      </div>
+    </div>
+  </section>
+
   <!-- ==================== HIGHLIGHT CARDS ==================== -->
   <section class="highlights" id="highlights-section">
     <h2 class="section-title">🐾 오늘의 주요 사례</h2>
@@ -51,17 +62,38 @@
       <button class="filter-btn" data-filter="배송">배송문의</button>
       <button class="filter-btn" data-filter="교환/환불">교환/환불</button>
     </div>
+    <!-- Sort Controls -->
+    <div class="sort-bar" id="sort-bar">
+      <span class="sort-label">정렬:</span>
+      <div class="sort-options">
+        <button class="sort-btn active" data-sort="latest">최신순</button>
+        <button class="sort-btn" data-sort="priority">우선순위 높은순</button>
+        <button class="sort-btn" data-sort="risk">위험도 높은순</button>
+        <button class="sort-btn" data-sort="owner_first">사장님 확인 필요 우선</button>
+      </div>
+    </div>
+    <!-- Risk Sub-Filter -->
+    <div class="risk-filter-bar" id="risk-filter-bar">
+      <span class="risk-filter-label">위험도:</span>
+      <div class="risk-filter-options">
+        <button class="risk-btn active" data-risk="all">전체 위험</button>
+        <button class="risk-btn" data-risk="critical">🔴 치명</button>
+        <button class="risk-btn" data-risk="high">🔴 높음</button>
+        <button class="risk-btn" data-risk="medium">🟡 보통</button>
+        <button class="risk-btn" data-risk="low">🟢 낮음</button>
+      </div>
+    </div>
     <div class="filter-info" id="filter-info">
       <span id="filter-result-count">31개 문의</span>
-      <button class="reset-btn" id="reset-filter">초기화</button>
+      <button class="reset-btn" id="reset-filter">🔄 초기화</button>
     </div>
     <div class="inquiry-grid" id="inquiry-grid">
       <!-- Rendered by JS -->
     </div>
     <div id="empty-state" class="empty-state hidden">
       <div class="empty-icon">📭</div>
-      <h3>조건에 맞는 문의가 없습니다</h3>
-      <p>다른 필터를 선택해 보세요.</p>
+      <h3 id="empty-title">조건에 맞는 문의가 없습니다</h3>
+      <p id="empty-desc">다른 필터를 선택해 보세요.</p>
     </div>
   </section>
 

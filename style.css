@@ -112,6 +112,183 @@ body {
   color: var(--text-muted);
 }
 
+/* ==================== SEARCH BAR ==================== */
+.search-section {
+  padding: 20px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.search-container {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  font-size: 18px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 44px 14px 48px;
+  border: 2px solid var(--border);
+  border-radius: 30px;
+  font-size: 15px;
+  font-family: inherit;
+  background: white;
+  color: var(--text);
+  transition: all 0.25s ease;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(232, 133, 108, 0.12);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-clear {
+  position: absolute;
+  right: 12px;
+  background: var(--bg);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.search-clear:hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+/* ==================== SORT CONTROLS ==================== */
+.sort-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.sort-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sort-options {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.sort-btn {
+  padding: 6px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  background: white;
+  color: var(--text-light);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sort-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-dark);
+}
+
+.sort-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+/* ==================== RISK SUB-FILTER ==================== */
+.risk-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.risk-filter-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.risk-filter-options {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.risk-btn {
+  padding: 5px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background: white;
+  color: var(--text-light);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.risk-btn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.risk-btn.active {
+  background: var(--danger);
+  color: white;
+  border-color: var(--danger);
+}
+
+/* Risk badges on cards */
+.badge-risk {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: 2px;
+}
+.badge-risk-critical { background: #7F1D1D; color: #FEE2E2; }
+.badge-risk-high { background: #FEE2E2; color: #DC2626; }
+.badge-risk-medium { background: #FEF3C7; color: #D97706; }
+.badge-risk-low { background: #D1FAE5; color: #059669; }
+
 /* ==================== SECTION TITLES ==================== */
 .section-title {
   font-size: 24px;
@@ -241,13 +418,30 @@ body {
 }
 
 .reset-btn {
-  background: none;
+  background: var(--primary);
   border: none;
-  color: var(--primary);
+  color: white;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  text-decoration: underline;
+  padding: 8px 18px;
+  border-radius: 20px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(232, 133, 108, 0.25);
+}
+
+.reset-btn:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 4px 12px rgba(232, 133, 108, 0.35);
+  transform: translateY(-1px);
+}
+
+.reset-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(232, 133, 108, 0.2);
 }
 
 .inquiry-grid {
@@ -596,4 +790,40 @@ body {
   .hero { padding: 32px 16px 28px; }
   .hero-stats { flex-direction: column; gap: 12px; }
   .dashboard { padding: 24px 16px; }
+
+  /* Search */
+  .search-section { padding: 16px; }
+  .search-input { padding: 14px 44px 14px 44px; font-size: 16px; }
+  .search-input-wrap { min-height: 44px; }
+
+  /* Sort - stacked label + buttons */
+  .sort-bar { flex-direction: column; align-items: stretch; gap: 6px; }
+  .sort-label { text-align: center; }
+  .sort-options { justify-content: center; }
+  .sort-btn { padding: 10px 16px; font-size: 13px; min-height: 44px; min-width: 44px; }
+
+  /* Risk filter - stacked label + buttons */
+  .risk-filter-bar { flex-direction: column; align-items: stretch; gap: 6px; }
+  .risk-filter-label { text-align: center; }
+  .risk-filter-options { justify-content: center; }
+  .risk-btn { padding: 10px 14px; font-size: 13px; min-height: 44px; min-width: 44px; }
+
+  /* Filter buttons touch-friendly */
+  .filter-btn { padding: 10px 16px; font-size: 13px; min-height: 44px; min-width: 44px; }
+
+  /* Reset button */
+  .reset-btn { padding: 10px 18px; min-height: 44px; }
+
+  /* Cards full width */
+  .inquiry-grid { grid-template-columns: 1fr; }
+
+  /* Modal */
+  .modal { width: 100%; max-width: 100%; padding: 20px; max-height: 90vh; border-radius: var(--radius) var(--radius) 0 0; top: auto; bottom: 0; left: 0; transform: none; }
+  .modal-overlay { background: rgba(0,0,0,0.5); }
+  .modal-info-grid { grid-template-columns: 1fr; }
+  .modal-close { top: 12px; right: 16px; font-size: 32px; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+
+  /* Stats stack */
+  .hero-stats { flex-direction: column; gap: 12px; }
+  .hero-stat-number { font-size: 28px; }
 }
