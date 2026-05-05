@@ -102,8 +102,8 @@ python3 -m http.server 8000
 
 | 순위 | 항목 |
 |------|------|
-| P1 | 모바일 반응형 최적화 (480px 이하) |
-| P2 | 필터 초기화 버튼, 우선순위 정렬, 검색어 입력 |
-| P3 | GPT 연동 시뮬레이션 (AI 응답 생성 체험), 통계 차트, 영문 버전 |
+| P1 | 실시간 데이터 시각화 (Chart.js), AI 응답 생성 시뮬레이션, CSV 내보내기 |
+| P2 | 다크 모드 토글, 알림 배지, 문의 등록 폼 |
+| P3 | 영문 버전 (i18n), API Mock 서버 |
 
-자세한 내용: [outputs/cycle-01/NEXT_CYCLE_INPUT.md](outputs/cycle-01/NEXT_CYCLE_INPUT.md)
+자세한 내용: [outputs/cycle-02/NEXT_CYCLE_INPUT.md](outputs/cycle-02/NEXT_CYCLE_INPUT.md)
